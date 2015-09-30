@@ -1,0 +1,7 @@
+.idea
+.project
+tmp
+build
+node_modules
+src*/bundle.*
+npm-debug.log
