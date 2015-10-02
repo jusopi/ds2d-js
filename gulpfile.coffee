@@ -1,24 +1,50 @@
-source = require 'vinyl-source-stream'
-buffer = require 'vinyl-buffer'
-
-browserify = require 'browserify'
-coffeeify = require 'coffeeify'
-
-bundleJs = (src, name, dest)->
-    browserify { entries: [src], debug: true, extensions: ['.coffee'] }
-    .transform coffeeify
-    .bundle()
-    .pipe source(name)
-    .pipe buffer()
-    .pipe gulp.dest(dest)
-
-
 
 gulp = require 'gulp'
 
+#
+#
+#
 gulp.task 'default', [
-    'compile'
+    'compile-dev'
+    'webserver'
+    'watch-src'
+    'watch-bundle'
 ]
 
-gulp.task 'compile', ->
-    bundleJs './src/index.coffee', 'bundle.js', './src'
+
+connect = require 'gulp-connect'
+
+#
+#
+#
+gulp.task 'webserver', -> connect.server { root: './src', livereload: true }
+
+#
+#
+#
+gulp.task 'watch-src', -> gulp.watch ['./src/main.coffee', './src/**/*.*', '!./src/bundle.js'], ['compile-dev']
+gulp.task 'watch-bundle', -> gulp.watch ['./src/bundle.js'], ['reload']
+
+#
+#
+#
+gulp.task 'reload', ->
+    gulp.src './src/*.html'
+    .pipe connect.reload()
+
+
+gutil = require 'gulp-util'
+webpack = require 'webpack'
+
+#
+#
+#
+gulp.task 'compile-dev', (func)->
+    console.log 'compiling...'
+    webpack require('./webpack.config')
+    , (err, stats)->
+        if err
+            throw new gutil.PluginError 'webpack', err
+
+        gutil.log '[webpack]', stats.toString({})
+        func()

@@ -1,3 +1,2 @@
 #
 
-ash = require 'ash.coffee'
