@@ -1,0 +1,3 @@
+#
+
+ash = require 'ash.coffee'
