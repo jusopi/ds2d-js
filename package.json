@@ -2,7 +2,7 @@
   "name": "ds2d-js",
   "version": "0.1.0",
   "description": "ds2d (javascript version)",
-  "main": "main.js",
+  "main": "./src/main.coffee",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
   },

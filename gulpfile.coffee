@@ -35,16 +35,16 @@ gulp.task 'reload', ->
 
 gutil = require 'gulp-util'
 webpack = require 'webpack'
+buildCnt = 0
 
 #
 #
 #
 gulp.task 'compile-dev', (func)->
-    console.log 'compiling...'
     webpack require('./webpack.config')
     , (err, stats)->
         if err
-            throw new gutil.PluginError 'webpack', err
+            throw new gutil.PluginError '[compile-dev]', err
 
-        gutil.log '[webpack]', stats.toString({})
+        gutil.log '[compile-dev]', "========== current build - #{++buildCnt} =========="
         func()
